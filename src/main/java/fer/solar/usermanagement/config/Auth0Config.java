@@ -6,6 +6,7 @@ import com.auth0.exception.Auth0Exception;
 import com.auth0.json.auth.TokenHolder;
 import com.auth0.net.client.Auth0HttpClient;
 import com.auth0.net.client.DefaultHttpClient;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @EnableScheduling
 @Slf4j
-@Profile("!test")
+@Getter
 public class Auth0Config {
 
     @Value("${auth0.domain}")
@@ -31,6 +32,9 @@ public class Auth0Config {
 
     @Value("${auth0.management.apiAudience}")
     private String apiAudience;
+
+    @Value("${auth0.api-gateway-identifier}")
+    private String apiGatewayIdentifier;
 
     private volatile TokenHolder tokenHolder;
 

@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Profile("!test")
 public class Auth0UserService implements UserService {
 
     private final Auth0Config auth0Config;
