@@ -1,6 +1,7 @@
 package fer.solar.usermanagement.user;
 
 import fer.solar.usermanagement.user.dto.CreateUserRequest;
+import fer.solar.usermanagement.user.dto.CreateUserResponse;
 import fer.solar.usermanagement.user.dto.PaginatedUserResponse;
 import fer.solar.usermanagement.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public Mono<String> createUser(@RequestBody CreateUserRequest createUserRequest) {
+    public Mono<CreateUserResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
         return userService.createUser(createUserRequest);
     }
 

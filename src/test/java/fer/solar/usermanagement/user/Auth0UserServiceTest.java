@@ -15,6 +15,7 @@ import com.auth0.net.Request;
 import com.auth0.net.Response;
 import fer.solar.usermanagement.config.Auth0Config;
 import fer.solar.usermanagement.user.dto.CreateUserRequest;
+import fer.solar.usermanagement.user.dto.CreateUserResponse;
 import fer.solar.usermanagement.user.dto.PaginatedUserResponse;
 import fer.solar.usermanagement.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -132,10 +133,10 @@ class Auth0UserServiceTest {
         mockRoleAssignmentSuccess();
         mockTicketGenerationSuccess();
 
-        Mono<String> resultMono = auth0UserService.createUser(defaultCreateRequest);
+        Mono<CreateUserResponse> resultMono = auth0UserService.createUser(defaultCreateRequest);
 
         StepVerifier.create(resultMono)
-                .expectNext(expectedTicketUrl)
+                .expectNextMatches(response -> response.getTicketUrl().equals(expectedTicketUrl))
                 .verifyComplete();
 
         User capturedUser = userCaptor.getValue();
@@ -164,10 +165,10 @@ class Auth0UserServiceTest {
         mockUserCreationSuccess();
         mockTicketGenerationSuccess();
 
-        Mono<String> resultMono = auth0UserService.createUser(requestWithNoRoles);
+        Mono<CreateUserResponse> resultMono = auth0UserService.createUser(requestWithNoRoles);
 
         StepVerifier.create(resultMono)
-                .expectNext(expectedTicketUrl)
+                .expectNextMatches(response -> response.getTicketUrl().equals(expectedTicketUrl))
                 .verifyComplete();
 
         verify(users).create(any(User.class));
@@ -184,7 +185,7 @@ class Auth0UserServiceTest {
         mockRoleAssignmentFailure(roleException);
         mockUserDeletionSuccess();
 
-        Mono<String> resultMono = auth0UserService.createUser(defaultCreateRequest);
+        Mono<CreateUserResponse> resultMono = auth0UserService.createUser(defaultCreateRequest);
 
         StepVerifier.create(resultMono)
                 .expectErrorSatisfies(throwable -> {
@@ -206,7 +207,7 @@ class Auth0UserServiceTest {
         mockTicketGenerationFailure(ticketException);
         mockUserDeletionSuccess();
 
-        Mono<String> resultMono = auth0UserService.createUser(defaultCreateRequest);
+        Mono<CreateUserResponse> resultMono = auth0UserService.createUser(defaultCreateRequest);
 
         StepVerifier.create(resultMono)
                 .expectErrorSatisfies(throwable -> {
@@ -225,7 +226,7 @@ class Auth0UserServiceTest {
         APIException createException = createApiException("User creation failed", 400);
         mockUserCreationFailure(createException);
 
-        Mono<String> resultMono = auth0UserService.createUser(defaultCreateRequest);
+        Mono<CreateUserResponse> resultMono = auth0UserService.createUser(defaultCreateRequest);
 
         StepVerifier.create(resultMono)
                 .expectErrorSatisfies(throwable -> {
@@ -249,7 +250,7 @@ class Auth0UserServiceTest {
         mockRoleAssignmentFailure(roleException);
         mockUserDeletionFailure(deleteException);
 
-        Mono<String> resultMono = auth0UserService.createUser(defaultCreateRequest);
+        Mono<CreateUserResponse> resultMono = auth0UserService.createUser(defaultCreateRequest);
 
         StepVerifier.create(resultMono)
                 .expectErrorSatisfies(throwable -> {

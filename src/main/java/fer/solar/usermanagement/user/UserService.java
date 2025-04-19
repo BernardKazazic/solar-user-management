@@ -1,13 +1,14 @@
 package fer.solar.usermanagement.user;
 
 import fer.solar.usermanagement.user.dto.CreateUserRequest;
+import fer.solar.usermanagement.user.dto.CreateUserResponse;
 import fer.solar.usermanagement.user.dto.PaginatedUserResponse;
 import fer.solar.usermanagement.user.dto.UserResponse;
 import reactor.core.publisher.Mono;
 
 public interface UserService {
 
-    Mono<String> createUser(CreateUserRequest request);
+    Mono<CreateUserResponse> createUser(CreateUserRequest request);
 
     Mono<PaginatedUserResponse> listUsers(int page, int size);
 
